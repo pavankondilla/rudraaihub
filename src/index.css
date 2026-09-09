@@ -45,23 +45,6 @@
   }
 }
 
-@keyframes marqueeScroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-marquee {
-  animation: marqueeScroll 34s linear infinite;
-}
-
-.animate-marquee.is-paused {
-  animation-play-state: paused;
-}
-
 @keyframes revealUp {
   from {
     opacity: 0;
@@ -108,11 +91,6 @@
   .scroll-reveal.is-visible {
     animation: none !important;
     opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .animate-marquee {
-    animation: none !important;
     transform: none !important;
   }
 }
