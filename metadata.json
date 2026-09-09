@@ -1,0 +1,6 @@
+{
+  "name": "RudraAiHub",
+  "description": "RudraAiHub - From Idea to Ai Business. Premier AI Automations, SaaS Solutions, Integrations & AI Consulting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
