@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Sparkles, Menu, X, ChevronRight, Phone, Mail, MapPin } from 'lucide-react';
+import { Sparkles, Menu, X, ChevronRight, Phone, Mail, MapPin, MessageSquare } from 'lucide-react';
 import logoSrc from '../../assets/logo/rudraaihub.png';
+import { WHATSAPP_URL, PHONE_TEL, PHONE_DISPLAY } from '../data/contact';
 
 interface HeaderProps {
   onOpenBookDemo: () => void;
@@ -30,8 +31,17 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center space-x-6">
           <span className="flex items-center space-x-1.5 hover:text-blue-400 transition-colors">
             <Phone className="w-3.5 h-3.5 text-blue-500" />
-            <a href="tel:+919703700576">+91 97037 00576</a>
+            <a href={`tel:${PHONE_TEL}`}>{PHONE_DISPLAY}</a>
           </span>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center space-x-1.5 hover:text-emerald-400 transition-colors"
+          >
+            <MessageSquare className="w-3.5 h-3.5 text-emerald-500" />
+            <span>WhatsApp</span>
+          </a>
           <span className="flex items-center space-x-1.5 hover:text-blue-400 transition-colors">
             <Mail className="w-3.5 h-3.5 text-blue-500" />
             <a href="mailto:info@rudraaihub.com">info@rudraaihub.com</a>

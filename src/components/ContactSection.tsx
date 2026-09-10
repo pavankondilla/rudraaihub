@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import { ScrollReveal } from './ScrollReveal';
 import { Starfield } from './Starfield';
-import { 
-  Send, 
-  CheckCircle2, 
-  MessageSquare, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Clock, 
-  Sparkles, 
-  ShieldCheck, 
-  Bot, 
-  BarChart3, 
-  Database, 
-  Settings,
+import { WHATSAPP_URL, PHONE_TEL, PHONE_DISPLAY } from '../data/contact';
+import {
+  Send,
+  CheckCircle2,
+  MessageSquare,
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Sparkles,
+  ShieldCheck,
   ArrowRight
 } from 'lucide-react';
 
@@ -24,20 +21,12 @@ export const ContactSection: React.FC = () => {
     email: '',
     phone: '',
     company: '',
-    service: 'AI Automations',
     budget: '$5k - $15k',
     message: ''
   });
 
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-
-  const servicesList = [
-    { id: 'AI Automations', label: 'AI Automations', icon: <Bot className="w-4 h-4" /> },
-    { id: 'SaaS Platforms', label: 'SaaS Platforms', icon: <BarChart3 className="w-4 h-4" /> },
-    { id: 'API Integrations', label: 'API Integrations', icon: <Database className="w-4 h-4" /> },
-    { id: 'AI Consulting', label: 'AI Consulting & Strategy', icon: <Settings className="w-4 h-4" /> },
-  ];
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,8 +88,17 @@ export const ContactSection: React.FC = () => {
                   </div>
                   <div>
                     <span className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Direct Phone & WhatsApp</span>
-                    <a href="tel:+919703700576" className="text-base font-bold text-white hover:text-blue-400 transition-colors">
-                      +91 97037 00576
+                    <a href={`tel:${PHONE_TEL}`} className="text-base font-bold text-white hover:text-blue-400 transition-colors">
+                      {PHONE_DISPLAY}
+                    </a>
+                    <a
+                      href={WHATSAPP_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-flex items-center space-x-1.5 text-[11px] font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>Chat on WhatsApp</span>
                     </a>
                     <span className="block text-[11px] text-slate-400">Available Mon - Sat, 9:00 AM - 7:00 PM IST</span>
                   </div>
@@ -175,32 +173,6 @@ export const ContactSection: React.FC = () => {
                     <span className="px-3 py-1 rounded-full bg-blue-600/20 text-blue-400 text-[11px] font-mono font-bold border border-blue-500/30">
                       Quick 24h Reply
                     </span>
-                  </div>
-
-                  {/* 1. Service Selection */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
-                      1. Select Primary Solution Required *
-                    </label>
-                    <div className="grid grid-cols-2 sm:grid-cols-2 gap-2.5">
-                      {servicesList.map((srv) => (
-                        <button
-                          key={srv.id}
-                          type="button"
-                          onClick={() => setFormData({ ...formData, service: srv.id })}
-                          className={`p-3 rounded-xl border text-xs font-semibold flex items-center space-x-2 transition-all text-left ${
-                            formData.service === srv.id
-                              ? 'bg-blue-600 border-blue-400 text-white shadow-lg shadow-blue-600/30'
-                              : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
-                          }`}
-                        >
-                          <span className={formData.service === srv.id ? 'text-white' : 'text-blue-400'}>
-                            {srv.icon}
-                          </span>
-                          <span className="truncate">{srv.label}</span>
-                        </button>
-                      ))}
-                    </div>
                   </div>
 
                   {/* Name & Email */}
@@ -328,7 +300,7 @@ export const ContactSection: React.FC = () => {
                   <div className="space-y-2">
                     <h3 className="text-3xl font-extrabold text-white">Thank You, {formData.name}!</h3>
                     <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
-                      Your project inquiry regarding <strong className="text-blue-400">{formData.service}</strong> has been successfully transmitted to our AI engineering team at RudraAiHub.
+                      Your project inquiry has been successfully transmitted to our AI engineering team at RudraAiHub.
                     </p>
                   </div>
 
@@ -336,10 +308,6 @@ export const ContactSection: React.FC = () => {
                     <div className="flex justify-between border-b border-slate-800 pb-2">
                       <span className="text-slate-400">Target Email:</span>
                       <strong className="text-white">{formData.email}</strong>
-                    </div>
-                    <div className="flex justify-between border-b border-slate-800 pb-2">
-                      <span className="text-slate-400">Selected Category:</span>
-                      <strong className="text-blue-400">{formData.service}</strong>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-slate-400">Estimated Budget:</span>
@@ -359,7 +327,6 @@ export const ContactSection: React.FC = () => {
                         email: '',
                         phone: '',
                         company: '',
-                        service: 'AI Automations',
                         budget: '$5k - $15k',
                         message: ''
                       });

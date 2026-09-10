@@ -27,12 +27,6 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo, onExploreServices })
 
           {/* Block A — Headline + Subheadline */}
           <div className="order-1 w-full lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
-            {/* Pill Tag — hidden on mobile to match reference */}
-            <div className="hidden lg:inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-950/80 border border-blue-500/30 text-blue-400 text-xs font-semibold backdrop-blur-sm">
-              <Sparkles className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
-              <span>Your One-Stop AI &amp; Digital Growth Partner</span>
-            </div>
-
             {/* Main Headline */}
             <h1 className="text-[2.5rem] leading-[1.1] sm:text-6xl lg:text-7xl font-extrabold tracking-tight sm:leading-[1.12] text-white">
               One-Stop Solution

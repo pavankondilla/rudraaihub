@@ -1,7 +1,8 @@
 import React from 'react';
 import logoSrc from '../../assets/logo/rudraaihub.png';
-import { Sparkles, Phone, Mail, MapPin, Linkedin, Facebook, Twitter, Instagram } from 'lucide-react';
+import { Sparkles, Phone, Mail, MapPin, Linkedin, Facebook, Twitter, Instagram, MessageSquare } from 'lucide-react';
 import { Starfield } from './Starfield';
+import { WHATSAPP_URL, PHONE_TEL, PHONE_DISPLAY } from '../data/contact';
 
 export const Footer: React.FC = () => {
   const scrollToSection = (id: string) => {
@@ -87,7 +88,13 @@ export const Footer: React.FC = () => {
             <ul className="space-y-3 text-xs sm:text-sm">
               <li className="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors">
                 <Phone className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                <a href="tel:+919703700576">+91 97037 00576</a>
+                <a href={`tel:${PHONE_TEL}`}>{PHONE_DISPLAY}</a>
+              </li>
+              <li className="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors">
+                <MessageSquare className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                  WhatsApp Chat
+                </a>
               </li>
               <li className="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors">
                 <Mail className="w-4 h-4 text-blue-500 flex-shrink-0" />

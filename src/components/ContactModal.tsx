@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Send, CheckCircle2, MessageSquare, Phone, Mail, MapPin } from 'lucide-react';
+import { WHATSAPP_URL, PHONE_TEL, PHONE_DISPLAY } from '../data/contact';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -49,16 +50,26 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
             </p>
 
             {/* Quick Contact Cards */}
-            <div className="grid grid-cols-2 gap-2 mb-6">
-              <div className="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-300 flex items-center space-x-2">
+            <div className="grid grid-cols-2 gap-2 mb-3">
+              <a href={`tel:${PHONE_TEL}`} className="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-300 hover:border-slate-700 transition-colors flex items-center space-x-2">
                 <Phone className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
-                <span>+91 97037 00576</span>
-              </div>
-              <div className="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-300 flex items-center space-x-2">
+                <span>{PHONE_DISPLAY}</span>
+              </a>
+              <a href="mailto:info@rudraaihub.com" className="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-300 hover:border-slate-700 transition-colors flex items-center space-x-2">
                 <Mail className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
                 <span className="truncate">info@rudraaihub.com</span>
-              </div>
+              </a>
             </div>
+
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mb-6 bg-emerald-600/15 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-600/25 transition-colors p-2.5 rounded-xl text-[11px] font-bold flex items-center justify-center space-x-2"
+            >
+              <MessageSquare className="w-3.5 h-3.5 flex-shrink-0" />
+              <span>Chat with us on WhatsApp</span>
+            </a>
 
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div>
