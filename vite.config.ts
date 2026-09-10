@@ -5,7 +5,9 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    base: process.env.GITHUB_PAGES ? '/rudraaihub/' : '/',
+    // Served from the root of the custom domain (rudraaihub.com) and of the
+    // github.io fallback, so assets must resolve from "/".
+    base: '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
