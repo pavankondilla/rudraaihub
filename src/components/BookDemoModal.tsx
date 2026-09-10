@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { X, Calendar, Clock, CheckCircle2, Sparkles, Send, User, Mail, Building, Phone } from 'lucide-react';
+import { X, Calendar, Clock, CheckCircle2, Sparkles, Send, User, Mail, Building, Phone, MessageSquare } from 'lucide-react';
+import { buildWhatsAppEnquiry } from '../data/contact';
 
 interface BookDemoModalProps {
   isOpen: boolean;
@@ -21,8 +22,20 @@ export const BookDemoModal: React.FC<BookDemoModalProps> = ({ isOpen, onClose })
 
   if (!isOpen) return null;
 
+  const enquiryLink = () =>
+    buildWhatsAppEnquiry('Demo request — rudraaihub.com', [
+      ['Name', formData.name],
+      ['Email', formData.email],
+      ['Phone', formData.phone],
+      ['Company', formData.company],
+      ['Interest', formData.serviceInterest],
+      ['Preferred time', formData.preferredTime],
+      ['Notes', formData.notes],
+    ]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    window.open(enquiryLink(), '_blank', 'noopener,noreferrer');
     setSubmitted(true);
   };
 
@@ -162,14 +175,24 @@ export const BookDemoModal: React.FC<BookDemoModalProps> = ({ isOpen, onClose })
             <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mx-auto text-emerald-400">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h3 className="text-2xl font-bold text-white">Demo Booking Received!</h3>
+            <h3 className="text-2xl font-bold text-white">Opening WhatsApp…</h3>
             <p className="text-xs text-slate-300 leading-relaxed max-w-sm mx-auto">
-              Thank you <strong className="text-white">{formData.name}</strong>. Our AI Solutions Team at <strong className="text-blue-400">RudraAiHub</strong> will review your request and send a Google Calendar invite to <strong className="text-white">{formData.email}</strong> shortly.
+              Thank you <strong className="text-white">{formData.name}</strong>. Your demo request has opened in WhatsApp — press send and our team at <strong className="text-blue-400">RudraAiHub</strong> will confirm a slot. If nothing opened, tap the button below.
             </p>
+
+            <a
+              href={enquiryLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition-colors"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>Send on WhatsApp</span>
+            </a>
 
             <button
               onClick={handleReset}
-              className="px-6 py-2.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white transition-colors"
+              className="block mx-auto px-6 py-2.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white transition-colors"
             >
               Done
             </button>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Send, CheckCircle2, MessageSquare, Phone, Mail, MapPin } from 'lucide-react';
-import { WHATSAPP_URL, PHONE_TEL, PHONE_DISPLAY } from '../data/contact';
+import { WHATSAPP_URL, PHONE_TEL, PHONE_DISPLAY, buildWhatsAppEnquiry } from '../data/contact';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -18,8 +18,17 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
 
   if (!isOpen) return null;
 
+  const enquiryLink = () =>
+    buildWhatsAppEnquiry('New message — rudraaihub.com', [
+      ['Name', formData.name],
+      ['Email', formData.email],
+      ['Phone', formData.phone],
+      ['Message', formData.message],
+    ]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    window.open(enquiryLink(), '_blank', 'noopener,noreferrer');
     setSubmitted(true);
   };
 
@@ -135,14 +144,24 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
             <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mx-auto text-emerald-400">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h3 className="text-2xl font-bold text-white">Message Sent!</h3>
+            <h3 className="text-2xl font-bold text-white">Opening WhatsApp…</h3>
             <p className="text-xs text-slate-300 leading-relaxed max-w-sm mx-auto">
-              Thank you <strong className="text-white">{formData.name}</strong>. The RudraAiHub team in Hyderabad has received your inquiry and will contact you back shortly at <strong className="text-blue-400">{formData.email}</strong>.
+              Thank you <strong className="text-white">{formData.name}</strong>. Your message has opened in WhatsApp — press send to reach the RudraAiHub team. If nothing opened, tap the button below.
             </p>
+
+            <a
+              href={enquiryLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition-colors"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>Send on WhatsApp</span>
+            </a>
 
             <button
               onClick={() => { setSubmitted(false); onClose(); }}
-              className="px-6 py-2.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white transition-colors"
+              className="block mx-auto px-6 py-2.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white transition-colors"
             >
               Close
             </button>

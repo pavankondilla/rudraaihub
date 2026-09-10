@@ -11,5 +11,22 @@ export const WHATSAPP_NUMBER = '919703700576';
 /** Message pre-filled in the user's WhatsApp composer. */
 export const WHATSAPP_MESSAGE = "Hi RudraAiHub, I'd like to discuss an AI project.";
 
-/** Click-to-chat link used for every "WhatsApp" action on the site. */
+/** Click-to-chat link used for every plain "WhatsApp" action on the site. */
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+
+/**
+ * Build a wa.me link whose message body is a labelled summary of a submitted
+ * form, so every contact / demo form delivers its details straight into the
+ * RudraAiHub WhatsApp inbox. Empty fields are skipped.
+ */
+export const buildWhatsAppEnquiry = (
+  title: string,
+  fields: Array<[label: string, value: string | undefined | null]>,
+): string => {
+  const body = fields
+    .filter(([, value]) => value != null && String(value).trim() !== '')
+    .map(([label, value]) => `${label}: ${String(value).trim()}`)
+    .join('\n');
+  const message = body ? `${title}\n\n${body}` : title;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+};

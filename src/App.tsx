@@ -8,6 +8,7 @@ import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { BookDemoModal } from './components/BookDemoModal';
 import { ContactModal } from './components/ContactModal';
+import { WhatsAppFloat } from './components/WhatsAppFloat';
 
 export default function App() {
   const [bookDemoOpen, setBookDemoOpen] = useState(false);
@@ -62,6 +63,9 @@ export default function App() {
         isOpen={contactOpen}
         onClose={() => setContactOpen(false)}
       />
+
+      {/* Persistent floating WhatsApp chat button */}
+      <WhatsAppFloat />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ScrollReveal } from './ScrollReveal';
 import { Starfield } from './Starfield';
-import { WHATSAPP_URL, PHONE_TEL, PHONE_DISPLAY } from '../data/contact';
+import { WHATSAPP_URL, PHONE_TEL, PHONE_DISPLAY, buildWhatsAppEnquiry } from '../data/contact';
 import {
   Send,
   CheckCircle2,
@@ -28,9 +28,23 @@ export const ContactSection: React.FC = () => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const enquiryLink = () =>
+    buildWhatsAppEnquiry('New project enquiry — rudraaihub.com', [
+      ['Name', formData.name],
+      ['Email', formData.email],
+      ['Phone', formData.phone],
+      ['Company', formData.company],
+      ['Budget', formData.budget],
+      ['Message', formData.message],
+    ]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    // Deliver the full enquiry straight into the RudraAiHub WhatsApp inbox.
+    window.open(enquiryLink(), '_blank', 'noopener,noreferrer');
+
     setTimeout(() => {
       setIsSubmitting(false);
       setSubmitted(true);
@@ -300,8 +314,17 @@ export const ContactSection: React.FC = () => {
                   <div className="space-y-2">
                     <h3 className="text-3xl font-extrabold text-white">Thank You, {formData.name}!</h3>
                     <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
-                      Your project inquiry has been successfully transmitted to our AI engineering team at RudraAiHub.
+                      Your enquiry has opened in WhatsApp — just hit send to reach our team at RudraAiHub. If it didn't open, use the button below.
                     </p>
+                    <a
+                      href={enquiryLink()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center space-x-2 mt-1 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition-all"
+                    >
+                      <MessageSquare className="w-4 h-4" />
+                      <span>Send on WhatsApp</span>
+                    </a>
                   </div>
 
                   <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 max-w-md mx-auto text-left text-xs space-y-2 text-slate-300">
