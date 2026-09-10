@@ -56,7 +56,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               </div>
               <div className="bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-[11px] text-slate-300 flex items-center space-x-2">
                 <Mail className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
-                <span className="truncate">hello@rudraaihub.com</span>
+                <span className="truncate">info@rudraaihub.com</span>
               </div>
             </div>
 

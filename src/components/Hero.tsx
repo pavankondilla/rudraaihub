@@ -11,7 +11,7 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo, onExploreServices }) => {
 
   return (
-    <section id="home" className="relative min-h-[90vh] bg-[#0A0F2C] text-white pt-12 pb-20 overflow-hidden flex items-center">
+    <section id="home" className="relative min-h-[90vh] bg-[#0A0F2C] text-white pt-10 pb-20 sm:pt-12 overflow-hidden flex items-center">
       {/* Interactive starfield */}
       <Starfield density={0.00018} swirl />
 
@@ -22,31 +22,41 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo, onExploreServices })
       {/* Decorative grid pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b15_1px,transparent_1px),linear-gradient(to_bottom,#1e293b15_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none"></div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 w-full">
+        <div className="flex flex-col items-center lg:grid lg:grid-cols-12 gap-10 lg:gap-8 lg:items-center">
 
-          {/* Left Column Text & CTAs */}
-          <div className="lg:col-span-7 space-y-8 text-center lg:text-left">
-            {/* Pill Tag */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-950/80 border border-blue-500/30 text-blue-400 text-xs font-semibold backdrop-blur-sm">
+          {/* Block A — Headline + Subheadline */}
+          <div className="order-1 w-full lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
+            {/* Pill Tag — hidden on mobile to match reference */}
+            <div className="hidden lg:inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-blue-950/80 border border-blue-500/30 text-blue-400 text-xs font-semibold backdrop-blur-sm">
               <Sparkles className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
               <span>Your One-Stop AI &amp; Digital Growth Partner</span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.12] text-white">
+            <h1 className="text-[2.5rem] leading-[1.1] sm:text-6xl lg:text-7xl font-extrabold tracking-tight sm:leading-[1.12] text-white">
               One-Stop Solution
               <br />
               for All Your <span className="text-[#2563EB]">AI</span> Needs
             </h1>
 
             {/* Subheadline */}
-            <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+            <p className="text-base sm:text-xl text-slate-300 max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
               Automations, premium websites, SaaS platforms, integrations, and AI consulting — all built by one team, so you never have to juggle vendors again.
             </p>
+          </div>
 
-            {/* Action Buttons - Matches image */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+          {/* Block B — Interactive Brain Orbit */}
+          <div className="order-2 w-full lg:col-span-5 relative flex flex-col items-center justify-center">
+            <InteractiveBrainOrbit
+              onOpenBookDemo={onOpenBookDemo}
+            />
+          </div>
+
+          {/* Block C — CTAs + Trust Badges */}
+          <div className="order-3 w-full lg:col-span-7 space-y-8">
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
               <button
                 onClick={onExploreServices}
                 className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-base bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/30 hover:shadow-blue-500/50 transition-all flex items-center justify-center space-x-2 group"
@@ -60,11 +70,12 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo, onExploreServices })
                 className="w-full sm:w-auto px-8 py-4 rounded-xl font-bold text-base bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white border border-slate-700/80 hover:border-slate-500 transition-all flex items-center justify-center space-x-2"
               >
                 <span>Book a Demo</span>
+                <Sparkles className="w-5 h-5 text-slate-400" />
               </button>
             </div>
 
-            {/* Trust Badges */}
-            <div className="pt-8 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center lg:text-left">
+            {/* Trust Badges — hidden on mobile to match reference */}
+            <div className="hidden lg:grid grid-cols-4 gap-4 pt-8 border-t border-slate-800/80 text-center lg:text-left">
               <div>
                 <p className="text-2xl font-bold text-white">1</p>
                 <p className="text-xs text-slate-400 font-medium">One-Stop AI Partner</p>
@@ -84,19 +95,8 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBookDemo, onExploreServices })
             </div>
           </div>
 
-          {/* Right Column Interactive Brain Orbit Graphic + Non-functional Voice AI Widget */}
-          <div className="lg:col-span-5 relative flex flex-col items-center justify-center">
-            
-            {/* Interactive Brain Orbit Network */}
-            <InteractiveBrainOrbit
-              onOpenBookDemo={onOpenBookDemo}
-            />
-
-          </div>
-
         </div>
       </div>
     </section>
   );
 };
-

@@ -34,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
           </span>
           <span className="flex items-center space-x-1.5 hover:text-blue-400 transition-colors">
             <Mail className="w-3.5 h-3.5 text-blue-500" />
-            <a href="mailto:hello@rudraaihub.com">hello@rudraaihub.com</a>
+            <a href="mailto:info@rudraaihub.com">info@rudraaihub.com</a>
           </span>
           <span className="flex items-center space-x-1.5">
             <MapPin className="w-3.5 h-3.5 text-blue-500" />

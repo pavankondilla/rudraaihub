@@ -113,8 +113,8 @@ export const ContactSection: React.FC = () => {
                   </div>
                   <div>
                     <span className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider">Email Inquiry</span>
-                    <a href="mailto:hello@rudraaihub.com" className="text-base font-bold text-white hover:text-blue-400 transition-colors">
-                      hello@rudraaihub.com
+                    <a href="mailto:info@rudraaihub.com" className="text-base font-bold text-white hover:text-blue-400 transition-colors">
+                      info@rudraaihub.com
                     </a>
                     <span className="block text-[11px] text-slate-400">Response guaranteed within 24 hours</span>
                   </div>

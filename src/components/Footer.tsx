@@ -91,7 +91,7 @@ export const Footer: React.FC = () => {
               </li>
               <li className="flex items-center space-x-3 text-slate-300 hover:text-white transition-colors">
                 <Mail className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                <a href="mailto:hello@rudraaihub.com">hello@rudraaihub.com</a>
+                <a href="mailto:info@rudraaihub.com">info@rudraaihub.com</a>
               </li>
               <li className="flex items-center space-x-3 text-slate-300">
                 <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
