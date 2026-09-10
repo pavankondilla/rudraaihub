@@ -5,9 +5,11 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    // Served from the root of the custom domain (rudraaihub.com) and of the
-    // github.io fallback, so assets must resolve from "/".
-    base: '/',
+    // Relative base so the same build works both at the custom domain root
+    // (https://rudraaihub.com/) and at the project-page sub-path
+    // (https://pavankondilla.github.io/rudraaihub/). The app has no
+    // client-side router, so relative asset URLs resolve correctly either way.
+    base: './',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
