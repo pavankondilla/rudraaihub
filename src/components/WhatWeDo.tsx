@@ -32,8 +32,8 @@ export const WhatWeDo: React.FC<WhatWeDoProps> = ({ onOpenBookDemo }) => {
         </ScrollReveal>
       </div>
 
-      {/* Full-bleed horizontal showcase — breaks out of the max-w-7xl
-          container so the card strip can run the full viewport width */}
+      {/* Full-bleed scroll-linked showcase — breaks out of the max-w-7xl
+          container so the pinned row can span the whole viewport width */}
       <ServicesShowcase services={SERVICES_DATA} onSelect={setSelectedService} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
