@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ServiceItem } from '../types';
 import { ScrollReveal } from './ScrollReveal';
 import {
@@ -9,16 +9,8 @@ import {
   Globe,
   Layers,
   ChevronRight,
-  ArrowLeftRight,
-  Hand
+  ArrowLeftRight
 } from 'lucide-react';
-
-type Mode = 'static' | 'touch' | 'pinned';
-
-// How much extra vertical scroll input (relative to the horizontal travel
-// distance) is required to fully traverse the pinned reveal — higher feels
-// slower/more deliberate and cinematic, lower feels snappier.
-const PIN_SCROLL_MULTIPLIER = 1.6;
 
 interface ServicesShowcaseProps {
   services: ServiceItem[];
@@ -54,7 +46,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, delay = 0, large = f
   <ScrollReveal
     as="div"
     className={`bg-white rounded-3xl border border-slate-200/80 hover:border-blue-500/50 shadow-sm hover:shadow-2xl hover:-translate-y-2 active:scale-[0.97] transition-all duration-300 ease-out flex flex-col justify-between group cursor-pointer flex-shrink-0 ${
-      large ? 'p-9 w-[300px] sm:w-[360px]' : 'p-8 w-[280px] sm:w-[320px]'
+      large ? 'p-9 w-[280px] sm:w-[360px]' : 'p-8 w-[260px] sm:w-[320px]'
     } ${extraClassName}`}
     delay={delay}
     variant="card"
@@ -88,153 +80,110 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, delay = 0, large = f
 );
 
 /**
- * Services row with three interaction modes, chosen once on mount:
- *  - "pinned" (fine pointer, motion allowed): the section pins in place
- *    while the page scrolls, translating normal vertical scroll into a
- *    cinematic horizontal reveal, with cards nearer the viewport center
- *    scaling/brightening as they come into focus.
- *  - "touch" (coarse pointer / mobile): native swipe with momentum
- *    scrolling, snap points, and larger cards sized for touch.
- *  - "static" (prefers-reduced-motion): plain manual horizontal scroll,
- *    no scroll-jacking or continuous motion.
+ * A single free-scrolling horizontal strip of service cards — no scroll
+ * hijacking. Vertical page scrolling always passes straight through:
+ *  - Touch: native side-swipe; a downward swipe scrolls the page as normal.
+ *  - Trackpad: native horizontal scroll.
+ *  - Mouse: click-and-drag to pan, or a vertical wheel is translated to
+ *    horizontal movement — but only until the strip reaches an end, at
+ *    which point the wheel goes back to scrolling the page.
  */
 export const ServicesShowcase: React.FC<ServicesShowcaseProps> = ({ services, onSelect }) => {
-  const [mode, setMode] = useState<Mode>('static');
-  const [scrollDistance, setScrollDistance] = useState(0);
-  const outerRef = useRef<HTMLDivElement | null>(null);
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
 
+  // Vertical wheel -> horizontal scroll, released at both ends so the page
+  // is never trapped. Skipped on touch devices (native swipe already works).
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isTouch = window.matchMedia('(pointer: coarse)').matches;
-    if (prefersReducedMotion) setMode('static');
-    else if (isTouch) setMode('touch');
-    else setMode('pinned');
+    const el = scrollerRef.current;
+    if (!el || window.matchMedia('(pointer: coarse)').matches) return;
+
+    const onWheel = (e: WheelEvent) => {
+      // Leave genuinely-horizontal gestures (trackpads, shift+wheel) alone.
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+
+      const max = el.scrollWidth - el.clientWidth;
+      if (max <= 0) return;
+
+      const atStart = el.scrollLeft <= 0;
+      const atEnd = el.scrollLeft >= max - 1;
+      if ((e.deltaY < 0 && atStart) || (e.deltaY > 0 && atEnd)) return; // hand back to page
+
+      el.scrollLeft += e.deltaY;
+      e.preventDefault();
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
   }, []);
 
-  // Measure how far the track overhangs the viewport, in pinned mode
+  // Click-and-drag to pan (mouse only).
   useEffect(() => {
-    if (mode !== 'pinned') return;
+    const el = scrollerRef.current;
+    if (!el || window.matchMedia('(pointer: coarse)').matches) return;
 
-    const measure = () => {
-      if (!trackRef.current) return;
-      const trackWidth = trackRef.current.scrollWidth;
-      const viewportWidth = window.innerWidth;
-      setScrollDistance(Math.max(0, trackWidth - viewportWidth + 96));
+    let dragging = false;
+    let startX = 0;
+    let startLeft = 0;
+    let moved = false;
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.button !== 0) return;
+      dragging = true;
+      moved = false;
+      startX = e.clientX;
+      startLeft = el.scrollLeft;
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (!dragging) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      el.scrollLeft = startLeft - dx;
+    };
+    const onPointerUp = () => {
+      dragging = false;
+    };
+    // Swallow the click that follows a drag so a card modal doesn't open.
+    const onClickCapture = (e: MouseEvent) => {
+      if (moved) {
+        e.stopPropagation();
+        e.preventDefault();
+        moved = false;
+      }
     };
 
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, [mode, services.length]);
-
-  // Scroll-driven horizontal translate + per-card focus scale/opacity
-  useEffect(() => {
-    if (mode !== 'pinned' || scrollDistance <= 0) return;
-
-    let frameId = 0;
-
-    const update = () => {
-      const outer = outerRef.current;
-      const track = trackRef.current;
-      if (!outer || !track) return;
-
-      const scrollRunway = scrollDistance * PIN_SCROLL_MULTIPLIER;
-      const rect = outer.getBoundingClientRect();
-      const scrolledIntoSection = Math.min(scrollRunway, Math.max(0, -rect.top));
-      const progress = scrolledIntoSection / scrollRunway;
-
-      track.style.transform = `translate3d(${-progress * scrollDistance}px, 0, 0)`;
-
-      const viewportCenter = window.innerWidth / 2;
-      cardRefs.current.forEach((card) => {
-        if (!card) return;
-        const cardRect = card.getBoundingClientRect();
-        const cardCenter = cardRect.left + cardRect.width / 2;
-        const distance = Math.abs(cardCenter - viewportCenter);
-        const normalized = Math.min(1, distance / (window.innerWidth * 0.62));
-        const scale = 1 - normalized * 0.12;
-        const opacity = 1 - normalized * 0.5;
-        card.style.transform = `scale(${scale})`;
-        card.style.opacity = `${opacity}`;
-      });
-    };
-
-    const onScroll = () => {
-      cancelAnimationFrame(frameId);
-      frameId = requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    el.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+    el.addEventListener('click', onClickCapture, true);
     return () => {
-      cancelAnimationFrame(frameId);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      el.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      el.removeEventListener('click', onClickCapture, true);
     };
-  }, [mode, scrollDistance]);
+  }, []);
 
-  if (mode === 'static') {
-    return (
-      <div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center lg:justify-end gap-1.5 mb-4 text-xs font-semibold text-slate-400">
-          <ArrowLeftRight className="w-3.5 h-3.5" />
-          <span>Scroll sideways to explore all services</span>
-        </div>
-        <div className="flex gap-6 sm:gap-8 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-6 px-4 sm:px-6 lg:px-8 [scrollbar-width:thin]">
-          {services.map((service, index) => (
-            <ServiceCard key={service.id} service={service} delay={index * 90} extraClassName="snap-start" onSelect={onSelect} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (mode === 'touch') {
-    return (
-      <div>
-        <div className="flex items-center justify-center gap-1.5 mb-4 text-xs font-semibold text-slate-400">
-          <Hand className="w-3.5 h-3.5" />
-          <span>Swipe to explore all services</span>
-        </div>
-        <div className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-6 px-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {services.map((service, index) => (
-            <ServiceCard key={service.id} service={service} delay={index * 70} large extraClassName="snap-center" onSelect={onSelect} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  // pinned: page-scroll-driven horizontal reveal
   return (
     <div>
-      <div className="flex items-center justify-center gap-1.5 mb-4 text-xs font-semibold text-slate-400">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center lg:justify-end gap-1.5 mb-4 text-xs font-semibold text-slate-400">
         <ArrowLeftRight className="w-3.5 h-3.5" />
-        <span>Keep scrolling to move through our services</span>
+        <span>Scroll, swipe or drag sideways to explore all services</span>
       </div>
+
       <div
-        ref={outerRef}
-        style={{ height: `calc(100vh + ${scrollDistance * PIN_SCROLL_MULTIPLIER}px)` }}
-        className="relative"
+        ref={scrollerRef}
+        className="flex gap-6 sm:gap-8 overflow-x-auto overflow-y-hidden overscroll-x-contain snap-x snap-proximity pb-6 px-4 sm:px-6 lg:px-8 [scrollbar-width:thin] cursor-grab active:cursor-grabbing select-none"
       >
-        <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-          <div ref={trackRef} className="flex gap-8 px-4 sm:px-6 lg:px-8 will-change-transform">
-            {services.map((service, index) => (
-              <div
-                key={service.id}
-                ref={(el) => {
-                  cardRefs.current[index] = el;
-                }}
-                className="flex-shrink-0"
-              >
-                <ServiceCard service={service} delay={index * 90} large onSelect={onSelect} />
-              </div>
-            ))}
-          </div>
-        </div>
+        {services.map((service, index) => (
+          <ServiceCard
+            key={service.id}
+            service={service}
+            delay={index * 70}
+            large
+            extraClassName="snap-start"
+            onSelect={onSelect}
+          />
+        ))}
       </div>
     </div>
   );
