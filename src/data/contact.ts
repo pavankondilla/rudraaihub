@@ -2,11 +2,11 @@
 // phone number, WhatsApp number and prefilled WhatsApp message stay identical
 // everywhere they appear (header, footer, contact section, contact modal).
 
-export const PHONE_DISPLAY = '+91 97037 00576';
-export const PHONE_TEL = '+919703700576';
+export const PHONE_DISPLAY = '+91 96761 13883';
+export const PHONE_TEL = '+919676113883';
 
 /** WhatsApp business number in international format, no "+" or spaces. */
-export const WHATSAPP_NUMBER = '919703700576';
+export const WHATSAPP_NUMBER = '919676113883';
 
 /** Message pre-filled in the user's WhatsApp composer. */
 export const WHATSAPP_MESSAGE = "Hi RudraAiHub, I'd like to discuss an AI project.";

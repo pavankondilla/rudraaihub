@@ -63,8 +63,8 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
-                <button onClick={() => scrollToSection('solutions')} className="hover:text-blue-400 transition-colors">
-                  Solutions
+                <button onClick={() => scrollToSection('testimonials')} className="hover:text-blue-400 transition-colors">
+                  Testimonials
                 </button>
               </li>
               <li>

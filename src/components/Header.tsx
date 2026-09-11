@@ -106,13 +106,13 @@ export const Header: React.FC<HeaderProps> = ({
           >
             Services
           </button>
-          <button 
-            onClick={() => scrollToSection('solutions')}
+          <button
+            onClick={() => scrollToSection('testimonials')}
             className="hover:text-white transition-colors"
           >
-            Solutions
+            Testimonials
           </button>
-          <button 
+          <button
             onClick={() => scrollToSection('why-us')}
             className="hover:text-white transition-colors"
           >
@@ -178,13 +178,13 @@ export const Header: React.FC<HeaderProps> = ({
             >
               Services
             </button>
-            <button 
-              onClick={() => scrollToSection('solutions')}
+            <button
+              onClick={() => scrollToSection('testimonials')}
               className="text-left py-2 hover:text-blue-400"
             >
-              Solutions
+              Testimonials
             </button>
-            <button 
+            <button
               onClick={() => scrollToSection('why-us')}
               className="text-left py-2 hover:text-blue-400"
             >

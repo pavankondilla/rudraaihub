@@ -4,6 +4,7 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { WhatWeDo } from './components/WhatWeDo';
 import { WhyChooseUs } from './components/WhyChooseUs';
+import { Testimonials } from './components/Testimonials';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { BookDemoModal } from './components/BookDemoModal';
@@ -46,6 +47,9 @@ export default function App() {
 
       {/* Why Choose RudraAiHub Section (Dark Theme matching image) */}
       <WhyChooseUs />
+
+      {/* Client Testimonials (incl. Love My Tour) */}
+      <Testimonials />
 
       {/* Detailed Inline Contact Section */}
       <ContactSection />
